@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+#P1{
+    position:absolute;
+    top:0px;
+    left:0px;
+    z-index:-1;
+}
+#P2{
+    position:absolute;
+    top:20px;
+    left:20px;
+    z-index:0;
+}
+#toggle0{
+    position:absolute;
+    top:300px;
+    left:50px;
+    z-index:0;
+}
+#toggle1{
+    position:absolute;
+    top:300px;
+    left:150px;
+    z-index:0;
+}
+#toggle2{
+    position:absolute;
+    top:300px;
+    left:250px;
+    z-index:0;
+}
+#toggle3{
+    position:absolute;
+    top:300px;
+    left:350px;
+    z-index:0;
+}
+#lightPower{
+    position:absolute;
+    top:100px;
+    left:200px;
+    z-index:0;
+}
+
+#light0{
+    position:absolute;
+    top:200px;
+    left:50px;
+    z-index:0;
+}
+#light1{
+    position:absolute;
+    top:200px;
+    left:150px;
+    z-index:0;
+}
+#light2{
+    position:absolute;
+    top:200px;
+    left:250px;
+    z-index:0;
+}
+#light3{
+    position:absolute;
+    top:200px;
+    left:350px;
+    z-index:0;
+}
+</style>
+</head>
+<body> 
+ <h1> Homework 1 (<a href="https://jsfiddle.net/paradoxCYZ/v8r0bhg1/9/"/>jsfiddle)</a></h1>
+</body>
+<div style="position:relative;">
+<img src="xmas.gif" id="P1" width="500" height="400">
+</div>
+<div id='light0' style='width:90px'>
+ light 0
+</div>
+<div id='light1' style='width:90px'>
+ light 1
+</div>
+<div id='light2' style= 'width:90px'>
+ light 2
+</div>
+
+<div id='light3' style= 'width:90px'>
+ light 3
+</div>
+
+<div>
+<button id='toggle0'>
+toggle0
+</button>
+</div>
+
+<div>
+<button id='toggle1'>
+toggle1
+</button>
+</div>
+
+<div>
+<button id='toggle2'>
+toggle2
+</button>
+</div>
+
+<div>
+<button id='toggle3'>
+toggle3
+</button>
+</div>
+
+<div>
+<button id='lightPower'>
+On/Off
+</button>
+<div>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+function Light(id, on, off) {
+	var id = '#' + id;
+	var status = true;
+	var OnOff = false;
+	var generalPower = false;
+	toggleLight();
+  function toggleLight() {
+  	// status != status;
+	status = !status;
+	if(generalPower === false || OnOff === false){
+		$(id).css ('backgroundColor', off);
+		$(id).text (id + ' is off');
+	}
+	else if(status === true){
+		$(id).css ('backgroundColor', on);
+		$(id).text (id + ' is blinking(on)');
+	}
+	else{
+		$(id).css ('backgroundColor', off);
+		if(generalPower != false){
+			$(id).text (id + ' is blinking(off)');
+		}
+		else
+			$(id).text (id + ' is off');
+	}
+  }
+
+  var timer;
+  var power = false;
+  this.toggleBlink = function() {
+		power = !power;
+		if (power === true) {
+			timer = setInterval (toggleLight, 500);
+		} else {
+			clearInterval (timer);
+		}
+  }
+  this.tPower = function() {
+	generalPower = !generalPower;
+	var s = generalPower;
+	power = !s;
+	status = !s;
+	OnOff = s;
+	this.toggleBlink();
+	if(generalPower === false)
+		toggleLight();
+  }
+  this.toggleButton = function() {
+	if(generalPower === false){
+		OnOff = false;
+	}
+	else{
+		OnOff = !OnOff;
+	}
+  }
+}
+
+var l0 = new Light('light0' , 'hsl(0, 100%, 50%)' , 'hsl(0, 63%, 50%)');
+$('#toggle0').click ( function() { l0.toggleButton(); } );
+
+var l1 = new Light('light1', 'hsl(30, 100%, 50%)', 'hsl(30, 61%, 50%)');
+$('#toggle1').click ( function() { l1.toggleButton(); } );
+
+var l2 = new Light('light2', 'hsl(134, 100%, 50%)', 'hsl(134, 55%, 50%)');
+$('#toggle2').click ( function() { l2.toggleButton(); } );
+
+var l3 = new Light('light3', 'hsl(216, 100%, 50%)', 'hsl(216, 37%, 50%)');
+$('#toggle3').click ( function() { l3.toggleButton(); } );
+
+$('#lightPower').click (
+				function() {
+					l0.tPower(); 
+					l1.tPower(); 
+					l2.tPower(); 
+					l3.tPower(); 
+				} );
+
+//$('#light0').click (function(){l0.toggleBlink()});
+
+// this is no good....
+// the argument has to be a function ...
+// can be named or anonymous
+//$('#l0Button').click ( l0.toggleBlink() );
+
+</script>
+</html>
