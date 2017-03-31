@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<div id="info"><a href="https://i.imgur.com/u5SeuNj.jpg">2D平面圖</a>
+  <br/>
+  <p id='v1'>
+    view1
+  </p>
+  <p id='v2'>
+    view2
+  </p>
+  <p id='v3'>
+    view3
+  </p>
+  </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r78/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://jyunming-chen.github.io/tutsplus/js/KeyboardState.js"></script>
+
+<style>
+#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #ffff00
+}
+
+body {
+  overflow: hidden;
+}
+
+</style>
+</head>
+<body> 
+
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+
+$('#v1').click(
+
+  function() {
+    camera.position.set(-150, 120, 150);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+  }
+);
+
+$('#v2').click(
+
+  function() {
+    camera.position.set(150, 150, 150);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+  }
+);
+
+$('#v3').click(
+
+  function() {
+    camera.position.set(0, 250, 100);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+  }
+);
+
+var texture;
+var camera, scene, renderer, mesh, light, controls;
+var keyboard = new KeyboardState();
+var turn = true;
+var angle = 0;
+
+init();
+animate();
+
+
+function Walls(g, m, x, y, z) {
+  var geometry = g;
+  var material = m;
+  newWall = new THREE.Mesh(geometry, material);
+  scene.add(newWall);
+  newWall.position.set(x, y, z);
+  
+  
+}
+
+function Windows(g, m, x, y, z) {
+  var geometry = g;
+  var material = m;
+  newWindow = new THREE.Mesh(geometry, material);
+  scene.add(newWindow);
+  newWindow.position.set(x, y, z);
+}
+
+function Doors(g, m, x, y, z) {
+  var geometry = g;
+  var material = m;
+  newDoor = new THREE.Mesh(geometry, material);
+  scene.add(newDoor);
+  newDoor.position.set(x, y, z);
+}
+
+function init() {
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+  camera.position.z = 500;
+  scene.add(camera);
+  
+  camera.position.set(150, 150, 150);
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+  light = new THREE.PointLight(0xFFFFFF);
+  light.position.set(0, 0, -30);
+  light.position.set(0, 100, -30);
+  light.position.set(-150, 120, 150);
+  light.position.set(150, 150, 150);
+  light.position.set(0, 250, 100);
+  scene.add(light);
+
+  var gridXZ = new THREE.GridHelper(120, 10, 'red', 'white');
+  scene.add(gridXZ);
+
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0xDDDDDD);
+
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  document.body.appendChild(renderer.domElement);
+
+  //test color 220088 //
+
+  var g1 = new THREE.BoxGeometry(2, 4, 100); //balcony: |
+  var m1 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g2 = new THREE.BoxGeometry(32, 4, 2); //balcony: -
+  var m2 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g3 = new THREE.BoxGeometry(4, 10, 20);
+  var m3 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g4 = new THREE.BoxGeometry(80, 10, 2);
+  var m4 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g5 = new THREE.BoxGeometry(4, 10, 11);
+  var m5 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g6 = new THREE.BoxGeometry(11.5, 10, 2);
+  var m6 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g7 = new THREE.BoxGeometry(4, 10, 15);
+  var m7 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g8 = new THREE.BoxGeometry(36, 10, 2);
+  var m8 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g9 = new THREE.BoxGeometry(80, 10, 2);
+  var m9 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g10 = new THREE.BoxGeometry(4, 10, 25);
+  var m10 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g11 = new THREE.BoxGeometry(2, 10, 13);
+  var m11 = new THREE.MeshLambertMaterial({
+    color: 0x0044BB
+  });
+
+  var g12 = new THREE.BoxGeometry(4, 10, 37);
+  var m12 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g13 = new THREE.BoxGeometry(2, 10, 21);
+  var m13 = new THREE.MeshLambertMaterial({
+    color: 0x227700
+  });
+
+  var g14 = new THREE.BoxGeometry(4, 10, 11);
+  var m14 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g15 = new THREE.BoxGeometry(30, 10, 4);
+  var m15 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g16 = new THREE.BoxGeometry(2, 10, 15);
+  var m16 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g17 = new THREE.BoxGeometry(30, 10, 2);
+  var m17 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g18 = new THREE.BoxGeometry(7, 10, 4);
+  var m18 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g19 = new THREE.BoxGeometry(2, 10, 15);
+  var m19 = new THREE.MeshLambertMaterial({
+    color: 0x227700
+  });
+
+  var g20 = new THREE.BoxGeometry(4, 10, 15);
+  var m20 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+
+  var g21 = new THREE.BoxGeometry(10.5, 10, 2);
+  var m21 = new THREE.MeshLambertMaterial({
+    color: 0x227700
+  });
+  
+  var g22 = new THREE.BoxGeometry(45, 10, 4);
+  var m22 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+  
+  var g23 = new THREE.BoxGeometry(5, 10, 9);
+  var m23 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+  
+  var g24 = new THREE.BoxGeometry(4, 10, 8);
+  var m24 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+  
+  var g25 = new THREE.BoxGeometry(4, 10, 28);
+  var m25 = new THREE.MeshLambertMaterial({
+    color: 0xFFAA33
+  });
+  
+  var g26 = new THREE.BoxGeometry(4, 10, 68);
+  var m26 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g27 = new THREE.BoxGeometry(16, 10, 4);
+  var m27 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g28 = new THREE.BoxGeometry(6, 10, 4);
+  var m28 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g29 = new THREE.BoxGeometry(40, 10, 4);
+  var m29 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g30 = new THREE.BoxGeometry(16, 10, 4);
+  var m30 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g31 = new THREE.BoxGeometry(40, 10, 4);
+  var m31 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g32 = new THREE.BoxGeometry(23, 10, 4);
+  var m32 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g33 = new THREE.BoxGeometry(2, 10, 18);
+  var m33 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });  
+  
+  var g34 = new THREE.BoxGeometry(12, 10, 2);
+  var m34 = new THREE.MeshLambertMaterial({
+    color: 0x227700
+  });
+  
+  var g35 = new THREE.BoxGeometry(2, 10, 32);
+  var m35 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g36 = new THREE.BoxGeometry(40, 10, 2);
+  var m36 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  var g37 = new THREE.BoxGeometry(33, 10, 4);
+  var m37 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  Wall37 = new THREE.Mesh(g37, m37);
+  scene.add(Wall37);
+  Wall37.position.set(-66.5, 5, 40);
+  Wall37.rotation.y = -2/3*Math.PI;
+  
+  var g38 = new THREE.BoxGeometry(4, 10, 20);
+  var m38 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g39 = new THREE.BoxGeometry(24, 10, 4);
+  var m39 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g40 = new THREE.BoxGeometry(2, 10, 16);
+  var m40 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g41 = new THREE.BoxGeometry(60, 10, 4);
+  var m41 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  var g42 = new THREE.BoxGeometry(2, 10, 33);
+  var m42 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g43 = new THREE.BoxGeometry(22, 10, 2);
+  var m43 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g44 = new THREE.BoxGeometry(11, 10, 2);
+  var m44 = new THREE.MeshLambertMaterial({
+    color: 0x227700
+  });
+  
+  var g45 = new THREE.BoxGeometry(2, 10, 30);
+  var m45 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g46 = new THREE.BoxGeometry(18, 10, 2);
+  var m46 = new THREE.MeshLambertMaterial({
+    color: 0x227700
+  });
+  var g47 = new THREE.BoxGeometry(4, 10, 2);
+  var m47 = new THREE.MeshLambertMaterial({
+    color: 0xffaa33
+  });
+  
+  var g48 = new THREE.BoxGeometry(12, 10, 2);
+  var m48 = new THREE.MeshLambertMaterial({
+    color: 0x227700
+  });
+  
+  Walls(g1, m1, 110, 2, 0);
+  Walls(g2, m2, 95, 2, 50);
+  Walls(g2, m2, 95, 2, -50);
+  Walls(g3, m3, 80, 5, -50);
+  Walls(g4, m4, 42, 5, -60);
+  Walls(g5, m5, 0, 5, -55.5);
+  Walls(g6, m6, -4, 5, -50.5);
+  Walls(g7, m7, -8, 5, -57.5);
+  Walls(g8, m8, -24, 5, -64);
+  Walls(g7, m7, -40, 5, -57.5);
+  Walls(g9, m9, -80, 5, -51);
+  Walls(g10, m10, -118, 5, -39);
+  Walls(g12, m12, -118, 5, 4.5);
+  Walls(g14, m14, -118, 5, 49.5);
+  Walls(g15, m15, -105, 5, 53);
+  Walls(g16, m16, -104, 5, 62.5);
+  Walls(g17, m17, -90, 5, 71);
+  Walls(g16, m16, -76, 5, 62.5);
+  Walls(g18, m18, -76, 5, 53);
+  Walls(g20, m20, 80, 5, 11.5);
+  Walls(g22, m22, 55.5, 5, 17);
+  Walls(g23, m23, 75.5, 5, 10.5);
+  Walls(g24, m24, 31, 5, 15);
+  Walls(g25, m25, 80, 5, 63);
+  Walls(g26, m26, 1, 5, 44);
+  Walls(g27, m27, 7, 5, 12);
+  Walls(g28, m28, 30, 5, 12);
+  Walls(g29, m29, 60, 5, 75);
+  Walls(g30, m30, 8, 5, 76);
+  Walls(g31, m31, -20, 5, 76);
+  Walls(g32, m32, 27.5, 5, 90);
+  Walls(g33, m33, 15, 5, 83);
+  Walls(g33, m33, 40, 5, 83);
+	Walls(g35, m35, -72, 5, 90);
+	Walls(g36, m36, -53, 5, 106.5);
+  Walls(g38, m38, -36.5, 5, 36);
+  Walls(g39, m39, -48.5, 5, 44);
+  Walls(g40, m40, -59.5, 5, 37);
+	Walls(g41, m41, -90, 5, 10);
+	Walls(g42, m42, -34, 5, 91);
+  Walls(g43, m43, -62, 5, 75);
+  Walls(g45, m45, -59.5, 5, 60);
+  Walls(g47, m47, -40.5, 5, 30);
+  Walls(g47, m47, -56.5, 5, 30);
+  
+  Windows(g11, m11, -118.5, 5, -20); //kitchen window
+
+  Doors(g13, m13, -118.5, 5, 33.5); //Entrance door
+  Doors(g19, m19, 80, 5, -32.5); //Balcony door1
+  Doors(g19, m19, 80, 5, -17.5); //Balcony door2
+  Doors(g19, m19, 80, 5, -2.5); //Balcony door3
+  Doors(g19, m19, 80, 5, 26.5); //Balcony door4
+  Doors(g19, m19, 80, 5, 41.5); //Balcony door5
+  Doors(g21,m21,-85,5,53); //toile door
+  Doors(g34,m34,21,5,12); //bedroom door
+  Doors(g44, m44, -45.5, 5, 76); //bathroom door
+  Doors(g46, m46, -10, 5, 30); //laundry room door
+  Doors(g46, m46, -25.5, 5, 30); //laundry room door 
+  Doors(g48, m48, -48.5, 5, 30); //Storage room door
+  
+}
+
+function animate() {
+  controls.update();
+
+  requestAnimationFrame(animate);
+  render();
+}
+
+function render() {
+  renderer.render(scene, camera);
+}
+
+// important to add this 
+// in jsfiddle!
+window.focus();
+
+</script>
+</body>
+</html>
