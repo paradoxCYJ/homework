@@ -290,6 +290,31 @@ function init() {
   var graph7 = new THREE.Mesh(g4, f7); //Asmodeus
   graph7.rotation.y = Math.PI / 3;
   SetPlace(graph7, -64, 100, 400);
+  /////   chair  /////
+  texLoader = new THREE.TextureLoader();
+  texLoader.setCrossOrigin('');
+  texLoader.load(
+    'https://paradoxcyj.github.io/homework/model/Bench_2K_Diffuse.jpg', // bumpmap
+    function(tex) {
+      bumpMap = tex;
+      console.log ('bumpmap loaded ...');
+    }
+    // the other two left NULL
+  );
+  
+  
+  var loader = new THREE.ObjectLoader();
+  loader.load('https://paradoxcyj.github.io/homework/model/wood-bench-2.json',
+    function(chair,x,y,z) {
+	  var c1, c2, c3 ,c4 ,c5, c6, c7;
+      chair.scale.set(0.3, 0.5, 0.5);
+	  SetPlace(chair, -400, 0, 400);
+	  c1 = chair.clone(); SetPlace(c1, -300, 0, 400);
+      c2 = chair.clone(); SetPlace(c2, -200, 0, 400);
+	  c3 = chair.clone(); SetPlace(c3, 200, 0, 400);
+	  c4 = chair.clone(); SetPlace(c4, 300, 0, 400);
+	  c4 = chair.clone(); SetPlace(c4, 400, 0, 400);
+    });
 
   ////////////////////////////////////////////////////////////////////////
   // planeGeometry (width, height, WIDTH_SEGS, HEIGHT_SEGS);
