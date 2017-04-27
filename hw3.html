@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<div id="info">Seven deadly sins-Gallery
+  <br>
+  <button id='general'>
+    開/關照明燈
+  </button>
+  <button id='display'>
+    開/關展示燈
+  </button>
+  <button id='helper'>
+    開/關Helper
+  </button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r78/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+  <script src = "https://jyunming-chen.github.io/tutsplus/js/KeyboardState.js" >
+</script>
+
+<style>
+#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #CCDDFF
+}
+
+body {
+  overflow: hidden;
+}
+</style>
+</head>
+<body> 
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+var camera, scene, renderer, mesh, controls;
+var L1, L2, L3, L4, L5, L6, L7;
+var s1, s2, s3, s4, s5, s6, s7;
+var P1, P2, P3, P4;
+var h1, h2, h3, h4;
+
+$('#general').click(
+  function() {
+
+    P1.visible = !P1.visible;
+    P2.visible = !P2.visible;
+    P3.visible = !P3.visible;
+    P4.visible = !P4.visible;
+  });
+
+$('#display').click(
+  function() {
+    L1.visible = !L1.visible;
+    L2.visible = !L2.visible;
+    L3.visible = !L3.visible;
+    L4.visible = !L4.visible;
+    L5.visible = !L5.visible;
+    L6.visible = !L6.visible;
+    L7.visible = !L7.visible;
+  }
+);
+$('#helper').click(
+  function() {
+    s1.visible = !s1.visible;
+    s2.visible = !s2.visible;
+    s3.visible = !s3.visible;
+    s4.visible = !s4.visible;
+    s5.visible = !s5.visible;
+    s6.visible = !s6.visible;
+    s7.visible = !s7.visible;
+
+    h1.visible = !h1.visible;
+    h2.visible = !h2.visible;
+    h3.visible = !h3.visible;
+    h4.visible = !h4.visible;
+  }
+);
+init();
+animate();
+
+function SetPlace(obj, x, y, z) {
+  var o = obj;
+  scene.add(o);
+  o.position.set(x, y, z);
+}
+
+function Plight(x, y, z) {
+  light = new THREE.PointLight(); //0xffffff);
+  light.position.set(x, y, z);
+  scene.add(light);
+  return light;
+}
+
+function viewP(light, sphereSize) {
+
+  var pointLightHelper = new THREE.PointLightHelper(light, sphereSize);
+  scene.add(pointLightHelper);
+  return pointLightHelper;
+}
+
+function SetLight(an, dis, penu, inte) {
+  var spotLight = new THREE.SpotLight(0xffffff);
+  spotLight.angle = 0.6;
+  spotLight.distance = 200;
+  spotLight.penumbra = 0.1;
+  spotLight.intensity = 1.5;
+  spotLight.castShadow = true;
+  return spotLight;
+}
+
+function seeLight(light) {
+
+  var spotLightHelper = new THREE.SpotLightHelper(light);
+  return spotLightHelper;
+}
+
+function init() {
+
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 5000);
+  camera.position.z = 500;
+  scene.add(camera);
+  camera.position.set(0, 240, 450);
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+  
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x888888);
+  document.body.appendChild(renderer.domElement);
+
+  P1 = Plight(-480, 200, -480); //left-up
+  h1 = viewP(P1, 100);
+  P2 = Plight(480, 200, -480); //right-up
+  h2 = viewP(P2, 100);
+  P3 = Plight(-480, 200, 480); //lefr-down
+  h3 = viewP(P3, 100);
+  P4 = Plight(480, 200, 480); //right-down
+  h4 = viewP(P4, 100);
+
+  var ambientlight = new THREE.AmbientLight(0x404040); // soft white light
+  scene.add(ambientlight);
+
+  L7 = SetLight(0.6, 300, 0.4, 1.5);
+  L7.position.set(30, 170, 420);
+  scene.add(L7);
+
+
+  L6 = SetLight(0.6, 300, 0.4, 1.5);
+  L6.position.set(160, 170, 150);
+  scene.add(L6);
+
+  L5 = SetLight(0.6, 300, 0.4, 1.5);
+  L5.position.set(380, 170, -50);
+  scene.add(L5);
+
+  L4 = SetLight(0.6, 300, 0.4, 1.5);
+  L4.position.set(-200, 170, -250);
+  scene.add(L4);
+
+  L3 = SetLight(0.6, 300, 0.4, 1.5);
+  L3.position.set(-240, 170, -270);
+  scene.add(L3);
+
+  L2 = SetLight(0.6, 300, 0.4, 1.5);
+  L2.position.set(240, 170, -270);
+  scene.add(L2);
+
+  L1 = SetLight(0.6, 300, 0.4, 1.5);
+  L1.position.set(0, 170, -270);
+  scene.add(L1);
+
+  var gridXZ = new THREE.GridHelper(100, 10, 'red', 'white');
+  //scene.add(gridXZ);
+  // wall
+  var g1 = new THREE.BoxGeometry(1000, 200, 10);
+  var g2 = new THREE.BoxGeometry(400, 200, 10);
+  var g3 = new THREE.BoxGeometry(200, 200, 10);
+
+  var g4 = new THREE.BoxGeometry(120, 160, 1); //frame1
+  var g5 = new THREE.BoxGeometry(140, 104, 1); //frame2
+  var g6 = new THREE.BoxGeometry(151.2, 188.1, 1); //frame3
+
+  var m = new THREE.MeshPhongMaterial({
+    map: new
+    THREE.TextureLoader().load('https://i.imgur.com/h3IURhA.png')
+
+  });
+
+  var f7 = new THREE.MeshPhongMaterial({ //frame1 2:3
+    map: new
+    THREE.TextureLoader().load('https://i.imgur.com/jhcwqrL.png')
+  });
+
+  var f6 = new THREE.MeshPhongMaterial({ //frame1 2:3
+    map: new
+    THREE.TextureLoader().load('https://i.imgur.com/wwEBJG2.png')
+  });
+
+  var f5 = new THREE.MeshPhongMaterial({ //frame1 2:3
+    map: new
+    THREE.TextureLoader().load('https://i.imgur.com/KKdeTkf.png')
+  });
+
+
+  var f4 = new THREE.MeshPhongMaterial({ //frame1 2:3
+    map: new
+    THREE.TextureLoader().load('https://i.imgur.com/7u3MBcv.png')
+  });
+
+  var f3 = new THREE.MeshPhongMaterial({ //Samael
+    map: new
+    THREE.TextureLoader().load('https://i.imgur.com/P0iscwt.jpg')
+  });
+
+  var f2 = new THREE.MeshPhongMaterial({ //Leviathan
+    map: new
+    THREE.TextureLoader().load('https://i.imgur.com/SjV1ye9.png')
+  });
+
+  var f1 = new THREE.MeshPhongMaterial({ //Lucifer
+    map: new
+    THREE.TextureLoader().load('https://i.imgur.com/NogQDFz.png')
+  });
+
+  var wallHellWidth = new THREE.Mesh(g1, m);
+  SetPlace(wallHellWidth, 0, 100, -500);
+
+  var wallEdenWidth1 = new THREE.Mesh(g2, m);
+  SetPlace(wallEdenWidth1, -300, 100, 500);
+
+  var wallEdenWidth2 = wallEdenWidth1.clone();
+  SetPlace(wallEdenWidth2, 300, 100, 500);
+
+  var wallLeft = wallHellWidth.clone();
+  wallLeft.rotation.y = -Math.PI / 2;
+  SetPlace(wallLeft, -500, 100, 0);
+
+  var wallRight = wallLeft.clone();
+  SetPlace(wallRight, 500, 100, 0);
+
+  var w1 = new THREE.Mesh(g3, m);
+  SetPlace(w1, 0, 100, -400);
+  var graph1 = new THREE.Mesh(g4, f1); //Lucifer
+  SetPlace(graph1, 0, 100, -394);
+
+  var w2 = new THREE.Mesh(g3, m);
+  w2.rotation.y = -Math.PI / 8;
+  SetPlace(w2, 300, 100, -350);
+  var graph2 = new THREE.Mesh(g6, f2); //Leviathan
+  graph2.rotation.y = -Math.PI / 8;
+  SetPlace(graph2, 300, 100, -344);
+
+  var w3 = new THREE.Mesh(g3, m);
+  w3.rotation.y = Math.PI / 8;
+  SetPlace(w3, -300, 100, -350);
+  var graph3 = new THREE.Mesh(g5, f3); //Samael
+  graph3.rotation.y = Math.PI / 8;
+  SetPlace(graph3, -300, 100, -344);
+
+  var w4 = new THREE.Mesh(g3, m);
+  w4.rotation.y = -Math.PI / 3;
+  SetPlace(w4, -300, 100, -150);
+  var graph4 = new THREE.Mesh(g4, f4); //Belphegor
+  graph4.rotation.y = -Math.PI / 3;
+  SetPlace(graph4, -294, 100, -150);
+
+  var w5 = new THREE.Mesh(g3, m);
+  w5.rotation.y = Math.PI / 3;
+  SetPlace(w5, 270, 100, -150);
+  var graph5 = new THREE.Mesh(g4, f5); //Mammon
+  graph5.rotation.y = Math.PI / 3;
+  SetPlace(graph5, 276, 100, -150);
+
+  var w6 = new THREE.Mesh(g3, m);
+  w6.rotation.y = Math.PI / 3;
+  SetPlace(w6, 100, 100, 120);
+  var graph6 = new THREE.Mesh(g4, f6); //Beelzebub
+  graph6.rotation.y = Math.PI / 3;
+  SetPlace(graph6, 106, 100, 120);
+
+  var w7 = new THREE.Mesh(g3, m);
+  w7.rotation.y = Math.PI / 3;
+  SetPlace(w7, -70, 100, 400);
+  var graph7 = new THREE.Mesh(g4, f7); //Asmodeus
+  graph7.rotation.y = Math.PI / 3;
+  SetPlace(graph7, -64, 100, 400);
+
+  ////////////////////////////////////////////////////////////////////////
+  // planeGeometry (width, height, WIDTH_SEGS, HEIGHT_SEGS);
+  //
+  var floor = new THREE.Mesh(new THREE.PlaneGeometry(1000, 1000, 100, 100),
+    new THREE.MeshLambertMaterial({
+      map: new
+      THREE.TextureLoader().load('https://i.imgur.com/QJmqqcP.jpg')
+    }));
+  scene.add(floor);
+  floor.rotation.x = -Math.PI / 2;
+
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
+
+  floor.receiveShadow = true;
+  floor.castShadow = true;
+  //    shadow
+
+  w1.receiveShadow = true;
+  w1.castShadow = true;
+
+  w2.receiveShadow = true;
+  w2.castShadow = true;
+
+  w3.receiveShadow = true;
+  w3.castShadow = true;
+
+  w4.receiveShadow = true;
+  w4.castShadow = true;
+
+  w5.receiveShadow = true;
+  w5.castShadow = true;
+
+  w6.receiveShadow = true;
+  w6.castShadow = true;
+
+  w7.receiveShadow = true;
+  w7.castShadow = true;
+
+  L1.target = w1;
+  L2.target = w2;
+  L3.target = w3;
+  L4.target = w4;
+  L5.target = w5;
+  L6.target = w6;
+  L7.target = w7;
+
+
+  s1 = seeLight(L1);
+  scene.add(s1);
+
+  s2 = seeLight(L2);
+  scene.add(s2);
+
+  s3 = seeLight(L3);
+  scene.add(s3);
+
+  s4 = seeLight(L4);
+  scene.add(s4);
+
+  s5 = seeLight(L5);
+  scene.add(s5);
+
+  s6 = seeLight(L6);
+  scene.add(s6);
+
+  s7 = seeLight(L7);
+  scene.add(s7);
+
+}
+
+function animate() {
+
+  s1.update();
+  s2.update();
+  s3.update();
+  s4.update();
+  s5.update();
+  s6.update();
+  s7.update();
+
+
+  controls.update();
+
+  requestAnimationFrame(animate);
+  render();
+}
+
+function render() {
+  renderer.render(scene, camera);
+}
+
+</script>
+</body>
+</html>
