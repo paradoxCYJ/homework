@@ -389,8 +389,23 @@ function init() {
 
 }
 
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+function onDocumentMouseDown( event ){
+   event.preventDefault();
+   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+   mouse.y = -(event.clientY / window.innerHeight) * 2 - 1;
+   raycaster.setFromCamera(mouse, camera);
+   var intersects = raycaster.intersectObjects(pickables);
+   if (intersects.length > 0){
+      target.copy (intersects[0].point);
+   }
+}
 function animate() {
-
+  
   s1.update();
   s2.update();
   s3.update();
