@@ -14,10 +14,15 @@
     開/關Helper
   </button>
 </div>
+<div id="phototext">
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r78/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
-  <script src = "https://jyunming-chen.github.io/tutsplus/js/KeyboardState.js" >
+<script src="https://jyunming-chen.github.io/tutsplus/js/KeyboardState.js">
+
+
 </script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 
 <style>
 #info {
@@ -32,6 +37,14 @@
 body {
   overflow: hidden;
 }
+#phototext {
+  position: absolute;
+  top: 80vh;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #ffffff
+}
 </style>
 </head>
 <body> 
@@ -43,6 +56,8 @@ var L1, L2, L3, L4, L5, L6, L7;
 var s1, s2, s3, s4, s5, s6, s7;
 var P1, P2, P3, P4;
 var h1, h2, h3, h4;
+var raycaster, pickables = [];
+var mouse = new THREE.Vector2();
 
 $('#general').click(
   function() {
@@ -128,7 +143,7 @@ function init() {
   scene.add(camera);
   camera.position.set(0, 240, 450);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
-  
+
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x888888);
@@ -290,6 +305,14 @@ function init() {
   var graph7 = new THREE.Mesh(g4, f7); //Asmodeus
   graph7.rotation.y = Math.PI / 3;
   SetPlace(graph7, -64, 100, 400);
+  
+  graph1.name = "Lucifer";
+  graph2.name = "Leviathan";
+  graph3.name = "Samael";
+  graph4.name = "Belphegor";
+  graph5.name = "Mammon";
+  graph6.name = "Beelzebub";
+  graph7.name = "Asmodeus";
   /////   chair  /////
   texLoader = new THREE.TextureLoader();
   texLoader.setCrossOrigin('');
@@ -297,23 +320,28 @@ function init() {
     'https://paradoxcyj.github.io/homework/model/Bench_2K_Diffuse.jpg', // bumpmap
     function(tex) {
       bumpMap = tex;
-      console.log ('bumpmap loaded ...');
+      console.log('bumpmap loaded ...');
     }
     // the other two left NULL
   );
-  
-  
+
+
   var loader = new THREE.ObjectLoader();
   loader.load('https://paradoxcyj.github.io/homework/model/wood-bench-2.json',
-    function(chair,x,y,z) {
-	  var c1, c2, c3 ,c4 ,c5, c6, c7;
+    function(chair, x, y, z) {
+      var c1, c2, c3, c4, c5, c6, c7;
       chair.scale.set(0.3, 0.5, 0.5);
-	  SetPlace(chair, -400, 0, 400);
-	  c1 = chair.clone(); SetPlace(c1, -300, 0, 400);
-      c2 = chair.clone(); SetPlace(c2, -200, 0, 400);
-	  c3 = chair.clone(); SetPlace(c3, 200, 0, 400);
-	  c4 = chair.clone(); SetPlace(c4, 300, 0, 400);
-	  c4 = chair.clone(); SetPlace(c4, 400, 0, 400);
+      SetPlace(chair, -400, 0, 400);
+      c1 = chair.clone();
+      SetPlace(c1, -300, 0, 400);
+      c2 = chair.clone();
+      SetPlace(c2, -200, 0, 400);
+      c3 = chair.clone();
+      SetPlace(c3, 200, 0, 400);
+      c4 = chair.clone();
+      SetPlace(c4, 300, 0, 400);
+      c4 = chair.clone();
+      SetPlace(c4, 400, 0, 400);
     });
 
   ////////////////////////////////////////////////////////////////////////
@@ -326,8 +354,12 @@ function init() {
     }));
   scene.add(floor);
   floor.rotation.x = -Math.PI / 2;
+  pickables.push(graph1, graph2, graph3, graph4, graph5, graph6, graph7);
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
+	raycaster = new THREE.Raycaster();
+  document.addEventListener('mousedown', onDocumentMouseDown, false);
+  
 
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -394,18 +426,20 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
-function onDocumentMouseDown( event ){
-   event.preventDefault();
-   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-   mouse.y = -(event.clientY / window.innerHeight) * 2 - 1;
-   raycaster.setFromCamera(mouse, camera);
-   var intersects = raycaster.intersectObjects(pickables);
-   if (intersects.length > 0){
-      target.copy (intersects[0].point);
-   }
+
+function onDocumentMouseDown(event) {
+  event.preventDefault();
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  var intersects = raycaster.intersectObjects(pickables);
+  if (intersects.length > 0) {
+  	$('#phototext').text ( intersects[0].object.name );
+  }
 }
+
 function animate() {
-  
+
   s1.update();
   s2.update();
   s3.update();
@@ -424,6 +458,7 @@ function animate() {
 function render() {
   renderer.render(scene, camera);
 }
+
 
 </script>
 </body>
